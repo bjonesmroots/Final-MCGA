@@ -39,7 +39,7 @@ export const logoutUser = () => {
 export const login = (email, password) => {
     return (dispatch) => {
         dispatch(loginFetching());
-        fetch("http://localhost:3001/auth/login", {
+        fetch("https://final-mcga-jones.herokuapp.com/auth/login", {
                 method: 'post',
                 headers: {
                     'Accept': 'application/json',

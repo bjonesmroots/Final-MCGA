@@ -10,21 +10,51 @@ const initialStore = {
 }
 
 export const addProducto = (nombre, descripcion, precio) => {
-    return {
-        type: 'ADD_PRODUCTO',
-        nombre: nombre,
-        descripcion: descripcion,
-        precio: precio
+    return async (dispatch) => {
+        let prod = JSON.stringify({
+            nombre: nombre,
+            descripcion: descripcion,
+            precio: parseFloat(precio)
+        });
+        try {
+            await fetch("https://final-mcga-jones.herokuapp.com/productos", {
+                method: 'post',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: prod
+            })
+            return dispatch(fetchProductos());
+        }
+        catch (error) {
+            return dispatch(fetchProductosFail(error.toString()));
+        }
     }
 }
 
+
 export const editProducto = (_id, nombre, descripcion, precio) => {
-    return {
-        type: 'EDIT_PRODUCTO',
-        _id: _id,
-        nombre: nombre,
-        descripcion: descripcion,
-        precio: precio
+    return async (dispatch) => {
+        let prod = JSON.stringify({
+            nombre: nombre,
+            descripcion: descripcion,
+            precio: parseFloat(precio)
+        });
+        try {
+            await fetch("https://final-mcga-jones.herokuapp.com/productos?id="+_id, {
+                method: 'put',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: prod
+            })
+            return dispatch(fetchProductos());
+        }
+        catch (error) {
+            return dispatch(fetchProductosFail(error.toString()));
+        }
     }
 }
 
@@ -92,45 +122,11 @@ const reducer = (store = initialStore, action) => {
             };
         }
         case 'ADD_PRODUCTO': {
-            let prod = JSON.stringify({
-                nombre: action.nombre,
-                descripcion: action.descripcion,
-                precio: parseFloat(action.precio)
-            });
-            fetch("https://final-mcga-jones.herokuapp.com/productos", {
-                method: 'post',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: prod
-            }).then((productoNuevo) => {
-                console.log('Producto Agregado');
-            }).catch((error) => {
-                console.log(error);
-            });
             return {
                 ...store,
             };
         }
         case 'EDIT_PRODUCTO': {
-            let prod = JSON.stringify({
-                nombre: action.nombre,
-                descripcion: action.descripcion,
-                precio: parseFloat(action.precio)
-            });
-            fetch("https://final-mcga-jones.herokuapp.com/productos?id="+action._id, {
-                method: 'put',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: prod
-            }).then((productoEditado) => {
-                console.log('Producto Editado');
-            }).catch((error) => {
-                console.log(error);
-            });
             return {
                 ...store,
             };
