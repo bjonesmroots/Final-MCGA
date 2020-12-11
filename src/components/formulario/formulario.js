@@ -1,6 +1,8 @@
 import React from 'react'
 import css from './formulario.module.css'
-import { Field } from 'redux-form'
+import { Field, reduxForm } from 'redux-form'
+import validate from './validate'
+import RenderField from './renderField'
 
 class Formulario extends React.Component {
 
@@ -32,9 +34,9 @@ class Formulario extends React.Component {
               <div className={css.informationSection}>
                   <span className={css.titleAlumno}>Producto:</span>
                   <Field name="_id" className={css.hiddenInput} component="input" type="text" />
-                  <Field placeholder="Nombre" name="nombre" className={css.input} component="input" type="text" />
-                  <Field placeholder="Descripción" name="descripcion" className={css.input} component="input" type="text" />
-                  <Field placeholder="Precio" name="precio" className={css.input} component="input" type="text" />
+                  <Field label="Nombre" name="nombre" component={RenderField} type="text" />
+                  <Field label="Descripción" name="descripcion" component={RenderField} type="text" />
+                  <Field label="Precio" name="precio" component={RenderField} type="text" />
                   <button id="saveButton" className={css.buttonSave} onClick={this.saveNewProducto}>Guardar Información</button>
               </div>
             </section>
@@ -51,8 +53,15 @@ class Formulario extends React.Component {
   }
 
   saveNewProducto = () => {
-      this.props.handleSubmit();
-      this.props.history.push('/');
+      const result = this.props.handleSubmit();
+      if (result == undefined) {
+        this.props.history.push('/');
+      }
   }
 }
-export default Formulario
+export default reduxForm({
+  form: 'formulario',
+  validate,
+  undefined,
+  asyncChangeFields: ['']
+})(Formulario)

@@ -1,13 +1,26 @@
 import React from 'react'
-import { Field } from 'redux-form'
+import { Field, reduxForm } from 'redux-form'
 import css from './login.module.css'
+import validate from './validate'
 
-const TextInput = (props) => {
-  return (<input 
-    className={css.input}
-    type={props.type}
-    {...props.input} 
-  />)
+const TextInput = (
+    {
+      input,
+      label,
+      type,
+        meta: {  touched, error }
+    }) => {
+      return (
+        <div>
+          <input 
+            className={css.input}
+            type={type}
+            placeholder={label}
+            {...input} 
+          />
+          {touched && error && <span className={css.error}>{error}</span>}
+        </div>
+  )
 }
 
 class Login extends React.Component {
@@ -23,8 +36,8 @@ class Login extends React.Component {
       <div className={css.app}>
         <div className={css.container}>
           <div className={css.title}>Login</div>
-            <Field name="email" component={TextInput} type="text" />
-            <Field name="password" component={TextInput} type="password" />
+            <Field label="Email" name="email" component={TextInput} type="text" />
+            <Field label="Password" name="password" component={TextInput} type="password" />
             <div className={css.error}>{this.props.messageError}</div>
           <button
             type="button"
@@ -39,4 +52,9 @@ class Login extends React.Component {
   }
 }
 
-export default Login
+export default reduxForm({
+  form: 'login',
+  validate,
+  undefined,
+  asyncChangeFields: ['']
+})(Login)

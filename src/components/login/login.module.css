@@ -26,6 +26,12 @@
   color: #ff6b6b;
 }
 
+.error {
+  font-weight: bold;
+  color: #700;
+}
+
+
 .value, .input {
   display: flex;
   align-items: center;
@@ -60,8 +66,4 @@
 
 .addButton {
   background-color: #78AC26;
-}
-
-.error {
-  color: red;
 }
