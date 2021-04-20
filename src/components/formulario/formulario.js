@@ -54,7 +54,7 @@ class Formulario extends React.Component {
 
   saveNewProducto = () => {
       const result = this.props.handleSubmit();
-      if (result == undefined) {
+      if (result === undefined) {
         this.props.history.push('/');
       }
   }
